@@ -3,10 +3,13 @@ const express = require('express');
 //IMPORTACION DE LOS CONTROLADORES
 const userController = require('../controllers/user.controller');
 
+//IMPORTACION DE LOS MIDDLEWARES
+const validationMiddleware = require('./../middlewares/validation.middleware')
+
 const router = express.Router();
 
-router.route('/signup').post(userController.createUser);
-router.route('/login').post(userController.loginUser);
+router.route('/signup').post(validationMiddleware.createUserValidation, userController.createUser);
+router.route('/login').post(validationMiddleware.loginUserValidation, userController.loginUser);
 
 router.route('/orders').get(userController.getAllOrdersByUser);
 router.route('/orders/:id').get(userController.getOrderById);
