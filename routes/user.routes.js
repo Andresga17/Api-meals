@@ -5,6 +5,7 @@ const userController = require('../controllers/user.controller');
 
 //IMPORTACION DE LOS MIDDLEWARES
 const validationMiddleware = require('./../middlewares/validation.middleware')
+const userMiddleware = require('./../middlewares/user.middleware')
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.route('/orders/:id').get(userController.getOrderById);
 
 router
   .route('/:id')
-  .patch(userController.UpdateUserProfile)
-  .delete(userController.deleteUserProfile);
+  .patch(userMiddleware.validIfUserExist, userController.UpdateUserProfile)
+  .delete(userMiddleware.validIfUserExist, userController.deleteUserProfile);
 
 module.exports = router;
