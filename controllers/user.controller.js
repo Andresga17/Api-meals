@@ -1,7 +1,7 @@
-const generateJWT = require('./../utils/jwt');
-const AppError = require('../utils/appError');
 const User = require('./../models/user.model');
+const AppError = require('../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
+const generateJWT = require('./../utils/jwt');
 const bcrypt = require('bcryptjs');
 
 exports.createUser = catchAsync(async (req, res, next) => {
@@ -62,7 +62,41 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.UpdateUserProfile = catchAsync(async (req, res, next) => {
+  const { name, email } = req.body;
+  const { user } = req;
+
+  await user.update({ name, email });
+
+  // const { id } = req.params;
+
+  // const { name, email } = req.body;
+
+  // const userUpdated = await User.findOne({
+  //   where: {
+  //     id,
+  //   },
+  // });
+
+  // await userUpdated.update({
+  //   name: name,
+  //   email: email,
+  // });
+
+  return res.status(200).json({
+    status: 'success',
+    message: 'The user has been updated',
+  });
+});
+exports.deleteUserProfile = catchAsync(async (req, res, next) => {
+  const { user } = req;
+
+  await user.update({ status: 'disabled' });
+
+  return res.status(200).json({
+    status: 'success',
+    message: 'the user has been deleted',
+  });
+});
 exports.getAllOrdersByUser = catchAsync(async (req, res, next) => {});
 exports.getOrderById = catchAsync(async (req, res, next) => {});
-exports.UpdateUserProfile = catchAsync(async (req, res, next) => {});
-exports.deleteUserProfile = catchAsync(async (req, res, next) => {});
