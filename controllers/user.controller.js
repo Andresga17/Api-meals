@@ -68,21 +68,6 @@ exports.UpdateUserProfile = catchAsync(async (req, res, next) => {
 
   await user.update({ name, email });
 
-  // const { id } = req.params;
-
-  // const { name, email } = req.body;
-
-  // const userUpdated = await User.findOne({
-  //   where: {
-  //     id,
-  //   },
-  // });
-
-  // await userUpdated.update({
-  //   name: name,
-  //   email: email,
-  // });
-
   return res.status(200).json({
     status: 'success',
     message: 'The user has been updated',

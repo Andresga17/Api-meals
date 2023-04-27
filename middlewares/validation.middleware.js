@@ -37,3 +37,12 @@ exports.loginUserValidation = [
   body('password').notEmpty().withMessage('password cannot be empty'),
   validFields,
 ];
+
+exports.createRestaurantValidation = [
+  body('name').notEmpty().withMessage('name cannot be empty'),
+  body('address').notEmpty().withMessage('address cannot be empty'),
+  body('rating')
+    .notEmpty()
+    .withMessage('please type a rating')
+    .isNumeric({ no_symbols: true }),
+];

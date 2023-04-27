@@ -3,18 +3,41 @@ const express = require('express');
 //IMPORTACION DE LOS CONTROLADORES
 const restaurantController = require('../controllers/restaurant.controller');
 
+//IMPORTACION DE LOS MIDDLEWARES
+const restaurantMiddleware = require('./../middlewares/restaurant.middleware');
+const authMiddleware = require('./../middlewares/auth.middleware');
+const validationsMiddleware = require('./../middlewares/validation.middleware');
+
 const router = express.Router();
 
 router
   .route('/')
-  .post(restaurantController.createRestaurant)
+  .post(
+    authMiddleware.protect,
+    validationsMiddleware.createRestaurantValidation,
+    restaurantController.createRestaurant
+  )
   .get(restaurantController.getAllRestaurants);
 
 router
   .route('/:id')
-  .get(restaurantController.getRestaurantById)
-  .patch(restaurantController.updateRestaurant)
-  .delete(restaurantController.deleteRestaurant);
+  .get(
+    restaurantMiddleware.validIfRestExist,
+    restaurantController.getRestaurantById
+  )
+
+  .patch(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin'),
+    restaurantMiddleware.validIfRestExist,
+    restaurantController.updateRestaurant,
+  )
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin'),
+    restaurantMiddleware.validIfRestExist,
+    restaurantController.deleteRestaurant,
+  );
 
 router.route('/reviews/:id').post(restaurantController.createReview);
 
