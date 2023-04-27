@@ -3,11 +3,14 @@
 require('dotenv').config();
 const app = require('./app');
 const { db } = require('./database/config');
+const initModel = require('./models/initModel');
 
 //AUTENTICACION CON LA BASE DE DATOS
 db.authenticate()
   .then(() => console.log('Database authenticated!'))
   .catch((error) => console.log(error));
+
+initModel();
 
 //SINCRONIZACION CON LA BASE DE DATOS
 db.sync()
