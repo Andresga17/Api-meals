@@ -13,7 +13,7 @@ router.use(authMiddleware.protect)
 
 router.route('/').post(newOrderMiddleware.validMealFromOrder, orderController.createOrder);
 
-router.route('/me').post(orderController.getAllMyOrders);
+router.route('/me').get(orderController.getAllMyOrders);
 
 router
   .route('/:id')

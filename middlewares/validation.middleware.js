@@ -45,4 +45,14 @@ exports.createRestaurantValidation = [
     .notEmpty()
     .withMessage('please type a rating')
     .isNumeric({ no_symbols: true }),
+  validFields,
+];
+
+exports.createMealValidation = [
+  body('name').notEmpty().withMessage('name cannot be empty'),
+  body('price')
+    .notEmpty()
+    .withMessage('price cannot be empty')
+    .isNumeric({ no_symbols: true }),
+  validFields,
 ];

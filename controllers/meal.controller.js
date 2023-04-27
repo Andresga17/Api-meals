@@ -57,6 +57,7 @@ exports.deleteMeal = catchAsync(async (req, res) => {
   const { meal } = req;
 
   await meal.update({ status: 'inactive' });
+  
   res.status(200).json({
     status: 'success',
     message: 'the meal has been deleted',
