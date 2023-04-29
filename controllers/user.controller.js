@@ -87,23 +87,36 @@ exports.deleteUserProfile = catchAsync(async (req, res, next) => {
 exports.getAllOrdersByUser = catchAsync(async (req, res, next) => {
   const { sessionUser } = req;
 
-  const user = await User.findOne({
+  const orders = await Order.findAll({
     where: {
-      id: sessionUser.id,
-      status: 'enabled',
+      userId: sessionUser.id,
+      status: 'active',
     },
-    attributes: {
-      exclude: ['password', 'status'],
-    },
-    include: [
-      {
-        model: Order,
-      },
-    ],
   });
   res.status(200).json({
     status: 'success',
-    user,
+    user: sessionUser.name,
+    orders,
   });
 });
-exports.getOrderById = catchAsync(async (req, res, next) => {});
+exports.getOrderById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { sessionUser } = req;
+
+  const order = await Order.findOne({
+    where: {
+      id,
+      status: 'active',
+      userId: sessionUser.id,
+    },
+  });
+
+  if (!order) {
+    return next(new AppError('This order do not belongs to user in session'));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    order,
+  });
+});
