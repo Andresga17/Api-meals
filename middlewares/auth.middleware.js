@@ -63,18 +63,3 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
-
-/**
- * IMPLEMENTACION DE restrictTo.
- * 
- * router.use(protectToken)
-
-para este caso supongamos que tenemos en nuestra aplicacion 3 roles,
-user, admin, root a continuación vamos a permitir acceso a los usuarios admin y root
-
-router.post('/', [
-  restrictTo('admin', 'root') // utilizamos el middleware y enviamos los roles que vamos
-	//a permitir en esa ruta
-], createProduct);
-
- */

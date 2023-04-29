@@ -1,6 +1,5 @@
 const Order = require('../models/order.model');
 const catchAsync = require('../utils/catchAsync');
-// const User = require('../models/user.model');
 
 exports.createOrder = catchAsync(async (req, res) => {
   const { quantity, mealId } = req.body;
@@ -33,8 +32,9 @@ exports.getAllMyOrders = catchAsync(async (req, res) => {
 
   const orders = await Order.findAll({
     where: {
-      userId: 8,
+      userId: sessionUser.id,
     },
+    
   });
 
   res.status(200).json({
@@ -43,5 +43,28 @@ exports.getAllMyOrders = catchAsync(async (req, res) => {
     orders,
   });
 });
-exports.updateOrderComplete = async (req, res) => {};
-exports.cancellOrder = async (req, res) => {};
+
+exports.updateOrderComplete = catchAsync(async (req, res) => {
+  const { order } = req;
+
+  
+  await order.update({ status: 'completed' });
+
+    res.status(200).json({
+    status: 'success',
+    message: 'The order has been updated',
+    order,
+  });
+});
+
+exports.cancellOrder = catchAsync(async (req, res) => {
+  const { order } = req
+
+  await order.update ({status: 'cancelled'})
+
+  res.status(200).json({
+    status: 'success',
+    message: 'the post has been deleted',
+    order
+  })
+});

@@ -25,13 +25,11 @@ router
     authMiddleware.protect,
     authMiddleware.restrictTo('admin'),
     mealMiddleware.validIfMealExist,
-    mealMiddleware.validIfMealExist,
     mealController.updateMeal
   )
   .delete(
     authMiddleware.protect,
     authMiddleware.restrictTo('admin'),
-    mealMiddleware.validIfMealExist,
     mealMiddleware.validIfMealExist,
     mealController.deleteMeal
   );
