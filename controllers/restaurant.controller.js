@@ -26,6 +26,11 @@ exports.getAllRestaurants = catchAsync(async (req, res) => {
     where: {
       status: 'active',
     },
+    include: [
+      {
+        model: Review,
+      },
+    ],
   });
 
   res.status(200).json({
@@ -53,7 +58,7 @@ exports.updateRestaurant = catchAsync(async (req, res) => {
     restaurant,
   });
 });
-exports.deleteRestaurant = catchAsync(async (req, res, next) => {
+exports.deleteRestaurant = catchAsync(async (req, res) => {
   const { restaurant } = req;
 
   await restaurant.update({ status: 'inactive' });
@@ -80,14 +85,34 @@ exports.createReview = async (req, res) => {
     status: 'succes',
     message: 'The review has been created',
     review: {
+      id: review.id,
       userId: sessionUser.id,
       comment: review.comment,
-      restaurantId: review.userId,
+      restaurantId: review.restaurantId,
       rating: review.rating,
     },
   });
 };
 exports.updateARestaurantReview = async (req, res) => {
-  
+  const { comment, rating } = req.body;
+  const { review } = req;
+
+  await review.update({ comment, rating });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'The review has been updated',
+    review,
+  });
 };
-exports.deleteARestaurantReview = async (req, res) => {};
+exports.deleteARestaurantReview = async (req, res) => {
+  const { review } = req;
+
+  await review.update({ status: 'deleted' });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'The review has been updated',
+    review,
+  });
+};

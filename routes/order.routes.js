@@ -7,18 +7,17 @@ const orderController = require('../controllers/order.controller');
 const newOrderMiddleware = require('./../middlewares/newOrder.middleware');
 const authMiddleware = require('./../middlewares/auth.middleware');
 const orderMiddleware = require('./../middlewares/order.middleware');
-const userFromOrderMiddleware = require('../middlewares/userFromOrder.middleware')
+const userFromOrderMiddleware = require('../middlewares/userFromOrder.middleware');
 
 const router = express.Router();
 
 router.use(authMiddleware.protect);
 
 router
-.route('/')
-.post(newOrderMiddleware.validMealFromOrder, orderController.createOrder);
+  .route('/')
+  .post(newOrderMiddleware.validMealFromOrder, orderController.createOrder);
 
 router.route('/me').get(orderController.getAllMyOrders);
-
 
 router
   .route('/:id')
@@ -26,7 +25,7 @@ router
     orderMiddleware.validIfOrderExist,
     userFromOrderMiddleware.userFromOrder,
     authMiddleware.protectAccountOwner,
-    orderController.updateOrderComplete,
+    orderController.updateOrderComplete
   )
   .delete(
     orderMiddleware.validIfOrderExist,

@@ -2,15 +2,16 @@ const User = require('../models/user.model');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.userFromOrder = catchAsync(async (req, res, next) => {
-  const { order } = req;
+exports.userFromReview = catchAsync(async (req, res, next) => {
+  const { review } = req;
 
   const user = await User.findOne({
     where: {
-      id: order.userId,
+      id: review.userId,
       status: 'enabled',
     },
   });
+
   if (!user) {
     return next(new AppError('user not found', 404));
   }

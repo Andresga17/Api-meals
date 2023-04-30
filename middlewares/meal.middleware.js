@@ -13,9 +13,9 @@ exports.validIfMealExist = catchAsync(async (req, res, next) => {
   });
 
   if (!meal) {
-    return next(new AppError('Meal not found', 404))
+    return next(new AppError('Meal not found', 404));
   }
 
-  req.meal = meal
-  next()
+  req.meal = meal;
+  next();
 });

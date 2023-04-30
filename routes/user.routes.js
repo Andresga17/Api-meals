@@ -32,7 +32,7 @@ router
     userController.deleteUserProfile
   );
 
-  router.route('/orders').get(userController.getAllOrdersByUser);
-  router.route('/orders/:id').get(userController.getOrderById);
+router.route('/orders').get(userController.getAllOrdersByUser);
+router.route('/orders/:id').get(userController.getOrderById);
 
 module.exports = router;

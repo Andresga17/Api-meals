@@ -127,7 +127,9 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
   });
 
   if (!order) {
-    return next(new AppError('This order do not belongs to user in session', 403));
+    return next(
+      new AppError('This order do not belongs to user in session', 403)
+    );
   }
 
   res.status(200).json({

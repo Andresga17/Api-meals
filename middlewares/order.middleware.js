@@ -13,9 +13,9 @@ exports.validIfOrderExist = catchAsync(async (req, res, next) => {
   });
 
   if (!order) {
-    return next(new AppError('Order not found', 404))
+    return next(new AppError('Order not found', 404));
   }
 
-  req.order = order
-  next()
+  req.order = order;
+  next();
 });

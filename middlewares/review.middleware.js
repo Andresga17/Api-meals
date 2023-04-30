@@ -3,12 +3,13 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.validIfReviewExist = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+  const { id, restaurantId } = req.params;
 
   const review = await Review.findOne({
     where: {
       id,
       status: 'active',
+      restaurantId: restaurantId,
     },
   });
 

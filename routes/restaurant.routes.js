@@ -7,7 +7,9 @@ const restaurantController = require('../controllers/restaurant.controller');
 const restaurantMiddleware = require('./../middlewares/restaurant.middleware');
 const authMiddleware = require('./../middlewares/auth.middleware');
 const validationsMiddleware = require('./../middlewares/validation.middleware');
-const reviewMiddleware = require('./../middlewares/review.middleware')
+const reviewMiddleware = require('./../middlewares/review.middleware');
+const userFromReviewMiddleware = require('./../middlewares/userFromReview.middleware');
+const validRatingMiddleware = require('./../middlewares/ratingValid.middleware');
 
 const router = express.Router();
 
@@ -16,6 +18,7 @@ router
   .post(
     authMiddleware.protect,
     validationsMiddleware.createRestaurantValidation,
+    validRatingMiddleware.ratinValidation,
     restaurantController.createRestaurant
   )
   .get(restaurantController.getAllRestaurants);
@@ -31,20 +34,40 @@ router
     authMiddleware.protect,
     authMiddleware.restrictTo('admin'),
     restaurantMiddleware.validIfRestExist,
-    restaurantController.updateRestaurant,
+    restaurantController.updateRestaurant
   )
   .delete(
     authMiddleware.protect,
     authMiddleware.restrictTo('admin'),
     restaurantMiddleware.validIfRestExist,
-    restaurantController.deleteRestaurant,
+    restaurantController.deleteRestaurant
   );
 
-router.route('/reviews/:id').post(authMiddleware.protect, restaurantController.createReview);
+router
+  .route('/reviews/:id')
+  .post(
+    authMiddleware.protect,
+    validRatingMiddleware.ratinValidation,
+    restaurantController.createReview
+  );
 
 router
   .route('/reviews/:restaurantId/:id')
-  .patch(authMiddleware.protect, reviewMiddleware.validIfReviewExist, restaurantController.updateARestaurantReview)
-  .delete(authMiddleware.protect, reviewMiddleware.validIfReviewExist, restaurantController.deleteARestaurantReview);
+  .patch(
+    authMiddleware.protect,
+    reviewMiddleware.validIfReviewExist,
+    userFromReviewMiddleware.userFromReview,
+    authMiddleware.protectAccountOwner,
+    authMiddleware.restrictTo('admin'),
+    restaurantController.updateARestaurantReview
+  )
+  .delete(
+    authMiddleware.protect,
+    reviewMiddleware.validIfReviewExist,
+    userFromReviewMiddleware.userFromReview,
+    authMiddleware.protectAccountOwner,
+    authMiddleware.restrictTo('admin'),
+    restaurantController.deleteARestaurantReview
+  );
 
 module.exports = router;

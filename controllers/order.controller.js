@@ -40,7 +40,7 @@ exports.getAllMyOrders = catchAsync(async (req, res) => {
       {
         model: Meal,
       },
-    ]
+    ],
   });
 
   res.status(200).json({

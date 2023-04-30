@@ -1,4 +1,5 @@
 const Restaurant = require('../models/restaurant.model');
+const Review = require('../models/review.model');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -10,6 +11,11 @@ exports.validIfRestExist = catchAsync(async (req, res, next) => {
       id,
       status: 'active',
     },
+    include: [
+      {
+        model: Review,
+      },
+    ],
   });
 
   if (!restaurant) {
