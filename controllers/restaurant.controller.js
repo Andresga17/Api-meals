@@ -1,4 +1,5 @@
 const Restaurant = require('../models/restaurant.model');
+const Review = require('../models/review.model');
 const catchAsync = require('../utils/catchAsync');
 
 exports.createRestaurant = catchAsync(async (req, res) => {
@@ -53,9 +54,9 @@ exports.updateRestaurant = catchAsync(async (req, res) => {
   });
 });
 exports.deleteRestaurant = catchAsync(async (req, res, next) => {
-    const { restaurant } = req;
+  const { restaurant } = req;
 
-    await restaurant.update({ status: 'inactive'})
+  await restaurant.update({ status: 'inactive' });
 
   res.status(200).json({
     status: 'success',
@@ -63,6 +64,30 @@ exports.deleteRestaurant = catchAsync(async (req, res, next) => {
     restaurant,
   });
 });
-exports.createReview = async (req, res) => {};
-exports.updateARestaurantReview = async (req, res) => {};
+exports.createReview = async (req, res) => {
+  const { sessionUser } = req;
+  const { comment, rating } = req.body;
+  const { id } = req.params;
+
+  const review = await Review.create({
+    rating,
+    comment,
+    restaurantId: id,
+    userId: sessionUser.id,
+  });
+
+  res.status(201).json({
+    status: 'succes',
+    message: 'The review has been created',
+    review: {
+      userId: sessionUser.id,
+      comment: review.comment,
+      restaurantId: review.userId,
+      rating: review.rating,
+    },
+  });
+};
+exports.updateARestaurantReview = async (req, res) => {
+  
+};
 exports.deleteARestaurantReview = async (req, res) => {};

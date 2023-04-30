@@ -7,6 +7,7 @@ const restaurantController = require('../controllers/restaurant.controller');
 const restaurantMiddleware = require('./../middlewares/restaurant.middleware');
 const authMiddleware = require('./../middlewares/auth.middleware');
 const validationsMiddleware = require('./../middlewares/validation.middleware');
+const reviewMiddleware = require('./../middlewares/review.middleware')
 
 const router = express.Router();
 
@@ -39,11 +40,11 @@ router
     restaurantController.deleteRestaurant,
   );
 
-router.route('/reviews/:id').post(restaurantController.createReview);
+router.route('/reviews/:id').post(authMiddleware.protect, restaurantController.createReview);
 
 router
   .route('/reviews/:restaurantId/:id')
-  .patch(restaurantController.updateARestaurantReview)
-  .delete(restaurantController.deleteARestaurantReview);
+  .patch(authMiddleware.protect, reviewMiddleware.validIfReviewExist, restaurantController.updateARestaurantReview)
+  .delete(authMiddleware.protect, reviewMiddleware.validIfReviewExist, restaurantController.deleteARestaurantReview);
 
 module.exports = router;
