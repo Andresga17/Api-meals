@@ -4,6 +4,7 @@ const catchAsync = require('./../utils/catchAsync');
 const generateJWT = require('./../utils/jwt');
 const bcrypt = require('bcryptjs');
 const Order = require('../models/order.model');
+const Meal = require('../models/meal.model');
 
 exports.createUser = catchAsync(async (req, res, next) => {
   const { name, email, password, role } = req.body;
@@ -92,6 +93,13 @@ exports.getAllOrdersByUser = catchAsync(async (req, res, next) => {
       userId: sessionUser.id,
       status: 'active',
     },
+    attributes: { exclude: ['updatedAt'] },
+    include: [
+      {
+        model: Meal,
+        attributes: { exclude: ['updatedAt'] },
+      },
+    ],
   });
   res.status(200).json({
     status: 'success',
@@ -109,6 +117,13 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
       status: 'active',
       userId: sessionUser.id,
     },
+    attributes: { exclude: ['updatedAt'] },
+    include: [
+      {
+        model: Meal,
+        attributes: { exclude: ['updatedAt'] },
+      },
+    ],
   });
 
   if (!order) {
